@@ -12,7 +12,7 @@ The module also registers a **tile feature** variant (`lockable-cover-feature`) 
 adds the lock as its own button row inside the standard tile card.
 
 > **Works standalone.** It pairs nicely with the companion
-> [`cover_lock`](./custom_components/cover_lock)
+> [`cover_lock`](https://github.com/neffez/lockable-cover)
 > integration (auto-reading the proxy's `locked` / `lock_entity` attributes),
 > but it works on **any** cover — just set `lock_entity` explicitly in the card
 > config. No integration required.
@@ -99,19 +99,18 @@ shows `mdi:lock-open-variant`.
 
 ## Companion integration (`cover_lock`)
 
-This repo also ships the optional **`cover_lock`** integration under
-[`custom_components/cover_lock`](./custom_components/cover_lock). It creates a
-proxy cover that actually **blocks movement** while locked (from any source: UI,
-automation, app, voice). The card automatically reads the proxy's `locked` and
-`lock_entity` attributes, so you don't need to configure `lock_entity` when
+The optional **`cover_lock`** integration lives in its own repository:
+[`neffez/lockable-cover`](https://github.com/neffez/lockable-cover). It creates
+a proxy cover that actually **blocks movement** while locked (from any source:
+UI, automation, app, voice). The card automatically reads the proxy's `locked`
+and `lock_entity` attributes, so you don't need to configure `lock_entity` when
 pairing the two.
 
-> **Note on HACS:** A HACS repository maps to exactly one category, and this
-> repo is published as a **Dashboard (plugin)** for the card. HACS therefore
-> installs only the card, not the integration. Install the integration manually:
-> copy the `custom_components/cover_lock` folder into your `/config/custom_components/`
-> and restart Home Assistant. See its [README](./custom_components/cover_lock/README.md)
-> for YAML setup.
+> **Note on HACS:** A HACS repository maps to exactly one category. This repo is
+> published as a **Dashboard (plugin)** for the card; the integration is a
+> separate **Integration** repository. Install the integration from
+> [`neffez/lockable-cover`](https://github.com/neffez/lockable-cover) via HACS
+> (custom repository, category Integration) and restart Home Assistant.
 
 ## License
 
