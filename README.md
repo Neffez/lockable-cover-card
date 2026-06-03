@@ -19,8 +19,11 @@ adds the lock as its own button row inside the standard tile card.
 
 ## Preview
 
-A native cover tile with a lock chip in the corner. Tap the chip to toggle the
-lock; it turns red while locked.
+<div align="center">
+<img src="preview.jpg" alt="preview">
+
+A native cover tile with a lock chip in the corner. Tap the chip to toggle the lock; it turns red while locked.
+</div>
 
 ## Installation
 
