@@ -8,7 +8,7 @@ small **lock chip** in the top-right corner. The chip toggles a lock entity and
 turns red while locked. Because it reuses the stock tile card, it looks exactly
 like a native cover tile.
 
-The module also registers a **tile feature** variant (`cover-lock-feature`) that
+The module also registers a **tile feature** variant (`lockable-cover-feature`) that
 adds the lock as its own button row inside the standard tile card.
 
 > **Works standalone.** It pairs nicely with the companion
@@ -35,9 +35,9 @@ HACS adds the Lovelace resource automatically.
 
 ### Manual installation
 
-1. Copy `cover-lock-card.js` into your `/config/www/` folder.
+1. Copy `lockable-cover-card.js` into your `/config/www/` folder.
 2. Add it as a dashboard resource (**Settings → Dashboards → ⋮ → Resources**):
-   - URL: `/local/cover-lock-card.js`
+   - URL: `/local/lockable-cover-card.js`
    - Resource type: **JavaScript Module**
 3. Hard-refresh your browser.
 
@@ -46,9 +46,9 @@ HACS adds the Lovelace resource automatically.
 ### A) Corner lock chip — wrapper card (recommended)
 
 ```yaml
-type: custom:cover-lock-card
-entity: cover.buro_lockable
-name: Büro
+type: custom:lockable-cover-card
+entity: cover.office_lockable
+name: Office
 # lock_entity: switch.xxx   # optional; auto-read from a cover_lock proxy
 # features:                 # optional; auto-derived from supported_features
 #   - type: cover-open-close
@@ -62,11 +62,11 @@ UI editor, but it occupies a full row.
 
 ```yaml
 type: tile
-entity: cover.buro_lockable
+entity: cover.office_lockable
 features:
   - type: cover-open-close
   - type: cover-position
-  - type: custom:cover-lock-feature
+  - type: custom:lockable-cover-feature
     # lock_entity: switch.xxx   # optional; else read from the `lock_entity` attr
 ```
 
@@ -76,7 +76,7 @@ If you are not using the `cover_lock` integration, point `lock_entity` at any
 toggleable entity (a `switch`, `input_boolean` or `lock`):
 
 ```yaml
-type: custom:cover-lock-card
+type: custom:lockable-cover-card
 entity: cover.living_room_blind
 name: Living Room
 lock_entity: input_boolean.living_room_blind_lock
