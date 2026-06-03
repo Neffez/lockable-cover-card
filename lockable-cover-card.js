@@ -1,5 +1,5 @@
 /*
- * Cover Lock Card
+ * Lockable Cover Card
  *
  * Renders the *native* Home Assistant tile card (the modern cover look:
  * icon, name, open/stop/close buttons and a position slider) and overlays a
@@ -8,9 +8,9 @@
  * exactly like a native HA cover tile.
  *
  * Config:
- *   type: custom:cover-lock-card
- *   entity: cover.buro_lockable      # cover to display
- *   name: Büro                       # optional, passed to the native card
+ *   type: custom:lockable-cover-card
+ *   entity: cover.office_lockable      # cover to display
+ *   name: Office                       # optional, passed to the native card
  *   lock_entity: switch.xxx          # optional; otherwise read from the
  *                                    #   cover's `lock_entity` attribute
  *   features: [...]                  # optional; override the tile features
@@ -18,7 +18,7 @@
  * Any other options are forwarded to the underlying native tile card.
  */
 
-class CoverLockCard extends HTMLElement {
+class LockableCoverCard extends HTMLElement {
   setConfig(config) {
     if (!config || !config.entity) {
       throw new Error("You need to define an 'entity' (a cover).");
@@ -192,17 +192,17 @@ class CoverLockCard extends HTMLElement {
   }
 }
 
-customElements.define("cover-lock-card", CoverLockCard);
+customElements.define("lockable-cover-card", LockableCoverCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "cover-lock-card",
-  name: "Cover Lock Card",
+  type: "lockable-cover-card",
+  name: "Lockable Cover Card",
   description: "Native cover card with a lock chip on top.",
 });
 
 /* -------------------------------------------------------------------------
- * Cover Lock Tile Feature  (recommended)
+ * Lockable Cover Tile Feature  (recommended)
  *
  * A custom tile feature that adds a lock toggle row to the *native* HA tile
  * card. Because it plugs into the stock tile card, the result looks exactly
@@ -211,17 +211,17 @@ window.customCards.push({
  *
  * Usage:
  *   type: tile
- *   entity: cover.buro_lockable
+ *   entity: cover.office_lockable
  *   features:
  *     - type: cover-open-close
  *     - type: cover-position
- *     - type: custom:cover-lock-feature
+ *     - type: custom:lockable-cover-feature
  *       # lock_entity: switch.xxx   # optional; else read from `lock_entity` attr
  * ---------------------------------------------------------------------- */
 
-class CoverLockFeature extends HTMLElement {
+class LockableCoverFeature extends HTMLElement {
   static getStubConfig() {
-    return { type: "custom:cover-lock-feature" };
+    return { type: "custom:lockable-cover-feature" };
   }
 
   setConfig(config) {
@@ -319,19 +319,19 @@ class CoverLockFeature extends HTMLElement {
   }
 }
 
-customElements.define("cover-lock-feature", CoverLockFeature);
+customElements.define("lockable-cover-feature", LockableCoverFeature);
 
 window.customTileFeatures = window.customTileFeatures || [];
 window.customTileFeatures.push({
-  type: "cover-lock-feature",
-  name: "Cover Lock",
+  type: "lockable-cover-feature",
+  name: "Lockable Cover",
   supported: (stateObj) =>
     !!stateObj && stateObj.entity_id.startsWith("cover."),
   configurable: false,
 });
 
 console.info(
-  "%c COVER-LOCK-CARD %c 1.7.0 ",
+  "%c LOCKABLE-COVER-CARD %c 1.7.0 ",
   "background:#03a9f4;color:#fff",
   ""
 );
