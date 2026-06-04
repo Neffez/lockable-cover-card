@@ -88,24 +88,31 @@ class LockableCoverCard extends HTMLElement {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 36px;
-          height: 36px;
-          border-radius: 18px;
-          background: var(--card-background-color, var(--ha-card-background, #fff));
-          box-shadow: var(--ha-card-box-shadow,
-                      0 2px 2px 0 rgba(0,0,0,.14),
-                      0 1px 5px 0 rgba(0,0,0,.12));
+          width: 32px;
+          height: 32px;
+          border-radius: 16px;
+          /* Match the subtle tinted background of native tile icons instead of
+             a solid card-colored chip with a drop shadow, so it blends in. */
+          background: rgba(var(--rgb-secondary-text-color, 114,114,114), .12);
           color: var(--secondary-text-color);
           cursor: pointer;
           transition: color .15s ease-in-out, background .15s ease-in-out;
           --mdc-icon-size: 20px;
         }
-        .clc-chip:hover { background: var(--secondary-background-color); }
+        .clc-chip:hover {
+          background: rgba(var(--rgb-secondary-text-color, 114,114,114), .2);
+        }
         .clc-chip:focus-visible {
           outline: 2px solid var(--primary-color);
           outline-offset: 2px;
         }
-        .clc-chip.locked { color: var(--error-color, #db4437); }
+        .clc-chip.locked {
+          color: var(--error-color, #db4437);
+          background: rgba(var(--rgb-error-color, 219,68,55), .12);
+        }
+        .clc-chip.locked:hover {
+          background: rgba(var(--rgb-error-color, 219,68,55), .2);
+        }
         .clc-chip.hidden { display: none; }
       </style>
       <ha-icon icon="mdi:lock-open-variant"></ha-icon>
