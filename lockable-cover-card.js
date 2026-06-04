@@ -372,7 +372,7 @@ window.customTileFeatures.push({
 });
 
 console.info(
-  "%c LOCKABLE-COVER-CARD %c 1.8.0 ",
+  "%c LOCKABLE-COVER-CARD %c 1.8.2 ",
   "background:#03a9f4;color:#fff",
   ""
 );
