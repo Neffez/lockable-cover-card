@@ -12,7 +12,7 @@ The module also registers a **tile feature** variant (`lockable-cover-feature`) 
 adds the lock as its own button row inside the standard tile card.
 
 > **Works standalone.** It pairs nicely with the companion
-> [`cover_lock`](https://github.com/neffez/lockable-cover)
+> [`lockable_cover`](https://github.com/neffez/lockable-cover)
 > integration (auto-reading the proxy's `locked` / `lock_entity` attributes),
 > but it works on **any** cover — just set `lock_entity` explicitly in the card
 > config. No integration required.
@@ -52,7 +52,7 @@ HACS adds the Lovelace resource automatically.
 type: custom:lockable-cover-card
 entity: cover.office_lockable
 name: Office
-# lock_entity: switch.xxx   # optional; auto-read from a cover_lock proxy
+# lock_entity: switch.xxx   # optional; auto-read from a lockable_cover proxy
 # features:                 # optional; auto-derived from supported_features
 #   - type: cover-open-close
 #   - type: cover-position
@@ -75,7 +75,7 @@ features:
 
 ### Standalone (any cover, explicit lock entity)
 
-If you are not using the `cover_lock` integration, point `lock_entity` at any
+If you are not using the `lockable_cover` integration, point `lock_entity` at any
 toggleable entity (a `switch`, `input_boolean` or `lock`):
 
 ```yaml
@@ -91,7 +91,7 @@ lock_entity: input_boolean.living_room_blind_lock
 | ------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------ |
 | `entity`      | string  | yes      | The cover entity to display (must start with `cover.`).                                                       |
 | `name`        | string  | no       | Display name, forwarded to the native tile card.                                                              |
-| `lock_entity` | string  | no       | Entity toggled by the lock chip. If omitted, it is read from the cover's `lock_entity` attribute (`cover_lock`). |
+| `lock_entity` | string  | no       | Entity toggled by the lock chip. If omitted, it is read from the cover's `lock_entity` attribute (`lockable_cover`). |
 | `features`    | list    | no       | Override the tile features. If omitted, derived from the cover's `supported_features` (blinds get a tilt slider). |
 
 Any other options are forwarded to the underlying native tile card.
@@ -100,9 +100,9 @@ The lock chip is **hidden** when no lock entity can be determined. While locked,
 the chip (or feature button) turns red and shows a `mdi:lock` icon; otherwise it
 shows `mdi:lock-open-variant`.
 
-## Companion integration (`cover_lock`)
+## Companion integration (`lockable_cover`)
 
-The optional **`cover_lock`** integration lives in its own repository:
+The optional **`lockable_cover`** integration lives in its own repository:
 [`neffez/lockable-cover`](https://github.com/neffez/lockable-cover). It creates
 a proxy cover that actually **blocks movement** while locked (from any source:
 UI, automation, app, voice). The card automatically reads the proxy's `locked`
