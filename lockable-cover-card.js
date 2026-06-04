@@ -27,6 +27,14 @@ class LockableCoverCard extends HTMLElement {
       throw new Error("'entity' must be a cover entity.");
     }
     this._config = config;
+    // In the sections grid HA reserves an integer number of grid rows per card
+    // and stretches the card to fill that cell. The native tile's `ha-card`
+    // normally stretches via `height: 100%`, but our extra wrapper div breaks
+    // that chain, so the tile keeps its natural (shorter) height and the rest
+    // of the reserved cell becomes dead space between cards. `display: contents`
+    // removes the host box from layout so the wrapper itself is the grid item
+    // and stretches to fill the cell.
+    this.style.display = "contents";
     this._card = undefined;
     // Guard against overlapping async builds (setConfig can fire repeatedly,
     // e.g. in the card editor) which would append duplicate native cards.
@@ -73,6 +81,9 @@ class LockableCoverCard extends HTMLElement {
     // Wrapper so we can position the chip relative to the native card.
     const wrapper = document.createElement("div");
     wrapper.style.position = "relative";
+    // Stretch to fill the reserved grid cell so the native tile fills the same
+    // height a plain tile card would, instead of leaving dead space below.
+    wrapper.style.height = "100%";
 
     const chip = document.createElement("div");
     chip.className = "clc-chip";
