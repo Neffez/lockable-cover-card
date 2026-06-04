@@ -28,6 +28,9 @@ class LockableCoverCard extends HTMLElement {
     }
     this._config = config;
     this._card = undefined;
+    // Guard against overlapping async builds (setConfig can fire repeatedly,
+    // e.g. in the card editor) which would append duplicate native cards.
+    this._building = false;
     this._buildOnce();
   }
 
@@ -64,12 +67,17 @@ class LockableCoverCard extends HTMLElement {
   }
 
   async _buildOnce() {
+    if (this._building) return;
+    this._building = true;
+
     // Wrapper so we can position the chip relative to the native card.
     const wrapper = document.createElement("div");
     wrapper.style.position = "relative";
 
     const chip = document.createElement("div");
     chip.className = "clc-chip";
+    chip.setAttribute("role", "button");
+    chip.setAttribute("tabindex", "0");
     chip.innerHTML = `
       <style>
         .clc-chip {
@@ -93,6 +101,10 @@ class LockableCoverCard extends HTMLElement {
           --mdc-icon-size: 20px;
         }
         .clc-chip:hover { background: var(--secondary-background-color); }
+        .clc-chip:focus-visible {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
         .clc-chip.locked { color: var(--error-color, #db4437); }
         .clc-chip.hidden { display: none; }
       </style>
@@ -101,6 +113,13 @@ class LockableCoverCard extends HTMLElement {
     chip.addEventListener("click", (ev) => {
       ev.stopPropagation();
       this._toggleLock();
+    });
+    chip.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") {
+        ev.preventDefault();
+        ev.stopPropagation();
+        this._toggleLock();
+      }
     });
 
     wrapper.appendChild(chip);
@@ -121,6 +140,7 @@ class LockableCoverCard extends HTMLElement {
     if (this._hass) card.hass = this._hass;
     wrapper.insertBefore(card, chip);
     this._card = card;
+    this._building = false;
     this._updateChip();
   }
 
@@ -158,7 +178,7 @@ class LockableCoverCard extends HTMLElement {
       return stateObj.attributes.locked === true;
     }
     const lockEntity = this._lockEntity();
-    if (lockEntity && this._hass.states[lockEntity]) {
+    if (lockEntity && this._hass && this._hass.states[lockEntity]) {
       return this._hass.states[lockEntity].state === "on";
     }
     return false;
@@ -179,8 +199,10 @@ class LockableCoverCard extends HTMLElement {
       locked ? "mdi:lock" : "mdi:lock-open-variant"
     );
     this._chip.title = locked
-      ? "Gesperrt – tippen zum Entsperren"
-      : "Entsperrt – tippen zum Sperren";
+      ? "Locked – tap to unlock"
+      : "Unlocked – tap to lock";
+    this._chip.setAttribute("aria-label", this._chip.title);
+    this._chip.setAttribute("aria-pressed", String(locked));
   }
 
   _toggleLock() {
@@ -298,8 +320,9 @@ class LockableCoverFeature extends HTMLElement {
       locked ? "mdi:lock" : "mdi:lock-open-variant"
     );
     this._btn.title = locked
-      ? "Gesperrt – tippen zum Entsperren"
-      : "Entsperrt – tippen zum Sperren";
+      ? "Locked – tap to unlock"
+      : "Unlocked – tap to lock";
+    this._btn.setAttribute("aria-label", this._btn.title);
     this._btn.style.setProperty(
       "--control-button-background-color",
       locked ? "var(--error-color)" : ""
@@ -331,7 +354,7 @@ window.customTileFeatures.push({
 });
 
 console.info(
-  "%c LOCKABLE-COVER-CARD %c 1.7.0 ",
+  "%c LOCKABLE-COVER-CARD %c 1.8.0 ",
   "background:#03a9f4;color:#fff",
   ""
 );
